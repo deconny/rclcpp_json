@@ -1,0 +1,2 @@
+# rclcpp_json
+实现ROS2 humble环境下将ROS的消息与json进行相互转换的功能
