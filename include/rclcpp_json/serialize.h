@@ -68,18 +68,18 @@ void serialize_message_fields(
 {
     if (!members)
     {
-        RCLCPP_ERROR(rclcpp::get_logger("roscpp_json"), "Invalid message members pointer.");
+        RCLCPP_ERROR(rclcpp::get_logger("rclcpp_json"), "Invalid message members pointer.");
         return;
     }
 
-    RCLCPP_DEBUG(rclcpp::get_logger("roscpp_json"), "Processing message with %d fields", members->member_count_);
+    RCLCPP_DEBUG(rclcpp::get_logger("rclcpp_json"), "Processing message with %d fields", members->member_count_);
     for (uint32_t i = 0; i < members->member_count_; ++i)
     {
         const rosidl_typesupport_introspection_cpp::MessageMember *member = members->members_ + i;
 
         if (!member || !member->name_)
         {
-            RCLCPP_ERROR(rclcpp::get_logger("roscpp_json"), "Invalid member or member name in message introspection.");
+            RCLCPP_ERROR(rclcpp::get_logger("rclcpp_json"), "Invalid member or member name in message introspection.");
             continue;
         }
 
@@ -90,11 +90,11 @@ void serialize_message_fields(
             field_name.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_") !=
                 std::string::npos)
         {
-            RCLCPP_ERROR(rclcpp::get_logger("roscpp_json"), "Invalid field name detected: %s", field_name.c_str());
+            RCLCPP_ERROR(rclcpp::get_logger("rclcpp_json"), "Invalid field name detected: %s", field_name.c_str());
             continue;
         }
 
-        RCLCPP_DEBUG(rclcpp::get_logger("roscpp_json"),
+        RCLCPP_DEBUG(rclcpp::get_logger("rclcpp_json"),
             "Serializing field: %s with type_id: %d",
             field_name.c_str(),
             member->type_id_);
@@ -115,7 +115,7 @@ void serialize_message_fields(
                 // 如果数组大小超过最大阈值，则跳过显示
                 if (array_size > MAX_ARRAY_SIZE)
                 {
-                    RCLCPP_WARN(rclcpp::get_logger("roscpp_json"),
+                    RCLCPP_WARN(rclcpp::get_logger("rclcpp_json"),
                         "Array size for field '%s' is too large (%zu), skipping display.",
                         field_name.c_str(),
                         array_size);
@@ -185,7 +185,7 @@ void serialize_message_fields(
                     }
                     break;
                     default:
-                        RCLCPP_ERROR(rclcpp::get_logger("roscpp_json"),
+                        RCLCPP_ERROR(rclcpp::get_logger("rclcpp_json"),
                             "Unsupported array element type for field: %s with type id: %d",
                             field_name.c_str(),
                             member->type_id_);
@@ -247,7 +247,7 @@ void serialize_message_fields(
                 }
                 break;
                 default:
-                    RCLCPP_ERROR(rclcpp::get_logger("roscpp_json"),
+                    RCLCPP_ERROR(rclcpp::get_logger("rclcpp_json"),
                         "Unsupported field type for field: %s with type id: %d",
                         field_name.c_str(),
                         member->type_id_);
@@ -257,7 +257,7 @@ void serialize_message_fields(
         }
         catch (const std::exception &e)
         {
-            RCLCPP_ERROR(rclcpp::get_logger("roscpp_json"),
+            RCLCPP_ERROR(rclcpp::get_logger("rclcpp_json"),
                 "Exception during serialization of field %s: %s",
                 field_name.c_str(),
                 e.what());
@@ -294,7 +294,7 @@ nlohmann::json serialize_to_json(const T &msg)
 
     if (!members)
     {
-        RCLCPP_ERROR(rclcpp::get_logger("roscpp_json"), "Failed to get message type support handle.");
+        RCLCPP_ERROR(rclcpp::get_logger("rclcpp_json"), "Failed to get message type support handle.");
         return json_obj;
     }
 
