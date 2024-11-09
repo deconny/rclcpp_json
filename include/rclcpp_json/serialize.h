@@ -109,7 +109,7 @@ void serialize_message_fields(
             {
                 nlohmann::json array_json = nlohmann::json::array();
 
-                // 获取数组大小（使用 size_function 而不是直接访问 array_size_）
+                // 获取数组大小
                 size_t array_size = member->array_size_;
                 if (member->size_function)
                 {
@@ -136,7 +136,6 @@ void serialize_message_fields(
                     }
                     else
                     {
-                        // 默认方式：通过偏移量计算元素指针
                         element_ptr = reinterpret_cast<const char *>(field_ptr) + j * member->size_function(field_ptr);
                     }
 
