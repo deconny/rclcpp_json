@@ -62,10 +62,6 @@ void serialize_field(nlohmann::json &json_obj, const std::string &field_name, co
     json_obj[field_name] = field_value;
 }
 
-void serialize_nested_message(nlohmann::json &json_obj,
-    const void *field_ptr,
-    const rosidl_typesupport_introspection_cpp::MessageMembers *members);
-
 // 序列化消息字段的主要函数
 void serialize_message_fields(
     nlohmann::json &json_obj, const void *msg, const rosidl_typesupport_introspection_cpp::MessageMembers *members)
@@ -184,7 +180,7 @@ void serialize_message_fields(
                             static_cast<const rosidl_typesupport_introspection_cpp::MessageMembers *>(
                                 member->members_->data);
                         nlohmann::json nested_json;
-                        serialize_nested_message(nested_json, element_ptr, nested_members);
+                        serialize_message_fields(nested_json, element_ptr, nested_members);
                         array_json.push_back(nested_json);
                     }
                     break;
@@ -246,7 +242,7 @@ void serialize_message_fields(
                         static_cast<const rosidl_typesupport_introspection_cpp::MessageMembers *>(
                             member->members_->data);
                     nlohmann::json nested_json;
-                    serialize_nested_message(nested_json, field_ptr, nested_members);
+                    serialize_message_fields(nested_json, field_ptr, nested_members);
                     json_obj[field_name] = nested_json;
                 }
                 break;
@@ -267,14 +263,6 @@ void serialize_message_fields(
                 e.what());
         }
     }
-}
-
-// 序列化嵌套消息的函数
-void serialize_nested_message(nlohmann::json &json_obj,
-    const void *field_ptr,
-    const rosidl_typesupport_introspection_cpp::MessageMembers *members)
-{
-    serialize_message_fields(json_obj, field_ptr, members);
 }
 
 // 将任意ROS2消息转换为JSON
