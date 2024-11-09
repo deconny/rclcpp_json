@@ -16,11 +16,6 @@ void deserialize_field(const nlohmann::json &json_obj, const std::string &field_
     field_value = json_obj.at(field_name).get<T>();
 }
 
-// 递归处理嵌套消息
-void deserialize_nested_message(void *field_ptr,
-    const nlohmann::json &json_obj,
-    const rosidl_typesupport_introspection_cpp::MessageMembers *members);
-
 // 反序列化消息字段的主要函数
 void deserialize_message_fields(
     void *msg, const nlohmann::json &json_obj, const rosidl_typesupport_introspection_cpp::MessageMembers *members)
@@ -119,7 +114,7 @@ void deserialize_message_fields(
                 case rosidl_typesupport_introspection_cpp::ROS_TYPE_MESSAGE: {
                     const rosidl_typesupport_introspection_cpp::MessageMembers *nested_members =
                         static_cast<const rosidl_typesupport_introspection_cpp::MessageMembers *>(member->members_->data);
-                    deserialize_nested_message(const_cast<void*>(element_ptr), array_json.at(j), nested_members);
+                    deserialize_message_fields(const_cast<void*>(element_ptr), array_json.at(j), nested_members);
                 }
                 break;
                 default:
@@ -172,7 +167,7 @@ void deserialize_message_fields(
             case rosidl_typesupport_introspection_cpp::ROS_TYPE_MESSAGE: {
                 const rosidl_typesupport_introspection_cpp::MessageMembers *nested_members =
                     static_cast<const rosidl_typesupport_introspection_cpp::MessageMembers *>(member->members_->data);
-                deserialize_nested_message(field_ptr, json_obj.at(field_name), nested_members);
+                deserialize_message_fields(field_ptr, json_obj.at(field_name), nested_members);
             }
             break;
             default:
@@ -180,14 +175,6 @@ void deserialize_message_fields(
             }
         }
     }
-}
-
-// 反序列化嵌套消息的函数
-void deserialize_nested_message(void *field_ptr,
-    const nlohmann::json &json_obj,
-    const rosidl_typesupport_introspection_cpp::MessageMembers *members)
-{
-    deserialize_message_fields(field_ptr, json_obj, members);
 }
 
 // 用于从JSON反序列化任何ROS2消息的函数
