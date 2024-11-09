@@ -22,7 +22,7 @@ void deserialize_message_fields(
 {
     if (!members)
     {
-        RCLCPP_ERROR(rclcpp::get_logger("roscpp_json"), "Invalid message members pointer.");
+        RCLCPP_ERROR(rclcpp::get_logger("rclcpp_json"), "Invalid message members pointer.");
         return;
     }
     
@@ -34,7 +34,7 @@ void deserialize_message_fields(
 
         if (!json_obj.contains(field_name))
         {
-            RCLCPP_WARN(rclcpp::get_logger("roscpp_json"), "Field '%s' not found in JSON object", field_name.c_str());
+            RCLCPP_WARN(rclcpp::get_logger("rclcpp_json"), "Field '%s' not found in JSON object", field_name.c_str());
             continue;
         }
 
@@ -210,7 +210,7 @@ void deserialize_from_json(const nlohmann::json &json_obj, T &msg)
 
     if (!members)
     {
-        RCLCPP_ERROR(rclcpp::get_logger("roscpp_json"), "Invalid message members pointer.");
+        RCLCPP_ERROR(rclcpp::get_logger("rclcpp_json"), "Invalid message members pointer.");
         return;
     }
 
