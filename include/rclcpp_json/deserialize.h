@@ -20,6 +20,12 @@ void deserialize_field(const nlohmann::json &json_obj, const std::string &field_
 void deserialize_message_fields(
     void *msg, const nlohmann::json &json_obj, const rosidl_typesupport_introspection_cpp::MessageMembers *members)
 {
+    if (!members)
+    {
+        RCLCPP_ERROR(rclcpp::get_logger("roscpp_json"), "Invalid message members pointer.");
+        return;
+    }
+    
     for (uint32_t i = 0; i < members->member_count_; ++i)
     {
         const rosidl_typesupport_introspection_cpp::MessageMember *member = &members->members_[i];
