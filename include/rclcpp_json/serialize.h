@@ -11,8 +11,6 @@
 
 #include "rosbag2_cpp/typesupport_helpers.hpp"
 
-#define MAX_ARRAY_SIZE 100000 // 数组显示元素的最大阈值，超过则不显示
-
 namespace rclcpp_json {
 
 // 解构函数
@@ -110,17 +108,6 @@ void serialize_message_fields(
                 if (member->size_function)
                 {
                     array_size = member->size_function(field_ptr);
-                }
-
-                // 如果数组大小超过最大阈值，则跳过显示
-                if (array_size > MAX_ARRAY_SIZE)
-                {
-                    RCLCPP_WARN(rclcpp::get_logger("rclcpp_json"),
-                        "Array size for field '%s' is too large (%zu), skipping display.",
-                        field_name.c_str(),
-                        array_size);
-                    json_obj[field_name] = nlohmann::json::array();
-                    continue;
                 }
 
                 for (size_t j = 0; j < array_size; ++j)
