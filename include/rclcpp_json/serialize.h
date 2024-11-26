@@ -14,7 +14,7 @@
 namespace rclcpp_json {
 
 // 解构函数
-std::string demangle(const char *name)
+inline std::string demangle(const char *name)
 {
     int status = 0;
     std::shared_ptr<char> res{abi::__cxa_demangle(name, nullptr, nullptr, &status), std::free};
@@ -22,7 +22,7 @@ std::string demangle(const char *name)
 }
 
 // 转换格式为 package/msg/MessageName
-std::string format_message_type(const std::string &demangled_name)
+inline std::string format_message_type(const std::string &demangled_name)
 {
     std::string formatted_name = demangled_name;
 
@@ -49,19 +49,19 @@ std::string format_message_type(const std::string &demangled_name)
 
 // 获取格式化类型名
 template<typename T>
-std::string get_formatted_type_name(const T &msg)
+inline std::string get_formatted_type_name(const T &msg)
 {
     return format_message_type(demangle(typeid(msg).name()));
 }
 
 template<typename T>
-void serialize_field(nlohmann::json &json_obj, const std::string &field_name, const T &field_value)
+inline void serialize_field(nlohmann::json &json_obj, const std::string &field_name, const T &field_value)
 {
     json_obj[field_name] = field_value;
 }
 
 // 序列化消息字段的主要函数
-void serialize_message_fields(
+inline void serialize_message_fields(
     nlohmann::json &json_obj, const void *msg, const rosidl_typesupport_introspection_cpp::MessageMembers *members)
 {
     if (!members)
@@ -254,7 +254,7 @@ void serialize_message_fields(
 
 // 将任意ROS2消息转换为JSON
 template<typename T>
-nlohmann::json serialize_to_json(const T &msg)
+inline nlohmann::json serialize_to_json(const T &msg)
 {
     std::string type_name = get_formatted_type_name(msg);
 
