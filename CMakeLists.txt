@@ -38,15 +38,9 @@ ament_target_dependencies(test_node
   ${dependencies}
 )
 
-add_executable(use_yaml_node src/use_yaml_node.cpp)
-ament_target_dependencies(use_yaml_node
-  ${dependencies}
-)
-
 install(
   TARGETS
   test_node
-  use_yaml_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
