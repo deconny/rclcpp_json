@@ -11,13 +11,13 @@ namespace rclcpp_json {
 
 // 辅助函数：从 JSON 对象中反序列化字段
 template<typename T>
-void deserialize_field(const nlohmann::json &json_obj, const std::string &field_name, T &field_value)
+inline void deserialize_field(const nlohmann::json &json_obj, const std::string &field_name, T &field_value)
 {
     field_value = json_obj.at(field_name).get<T>();
 }
 
 // 反序列化消息字段的主要函数
-void deserialize_message_fields(
+inline void deserialize_message_fields(
     void *msg, const nlohmann::json &json_obj, const rosidl_typesupport_introspection_cpp::MessageMembers *members)
 {
     if (!members)
@@ -185,7 +185,7 @@ void deserialize_message_fields(
 
 // 用于从JSON反序列化任何ROS2消息的函数
 template<typename T>
-void deserialize_from_json(const nlohmann::json &json_obj, T &msg)
+inline void deserialize_from_json(const nlohmann::json &json_obj, T &msg)
 {
     std::string type_name = get_formatted_type_name(msg);
 
