@@ -50,6 +50,10 @@ install(
   DESTINATION lib/${PROJECT_NAME}
 )
 
+install(DIRECTORY include/
+  DESTINATION include/
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -61,5 +65,8 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+ament_export_include_directories(include)
+ament_export_dependencies(${dependencies})
 
 ament_package()
