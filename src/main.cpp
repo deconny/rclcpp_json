@@ -1,5 +1,4 @@
-#include "rclcpp_json/serialize.h"
-#include "rclcpp_json/deserialize.h"
+#include "rclcpp_json/rclcpp_json.hpp"
 
 #include "geometry_msgs/msg/polygon_stamped.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
