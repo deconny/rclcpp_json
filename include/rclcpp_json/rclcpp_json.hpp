@@ -55,14 +55,14 @@ inline std::string get_formatted_type_name(const T &msg)
 }
 
 template<typename T>
-inline void serialize_field(nlohmann::ordered_json &json_obj, const std::string &field_name, const T &field_value)
+inline void serialize_field(nlohmann::json &json_obj, const std::string &field_name, const T &field_value)
 {
     json_obj[field_name] = field_value;
 }
 
 // 序列化消息字段的主要函数
 inline void serialize_message_fields(
-    nlohmann::ordered_json &json_obj, const void *msg, const rosidl_typesupport_introspection_cpp::MessageMembers *members)
+    nlohmann::json &json_obj, const void *msg, const rosidl_typesupport_introspection_cpp::MessageMembers *members)
 {
     if (!members)
     {
@@ -101,7 +101,7 @@ inline void serialize_message_fields(
         {
             if (member->is_array_)
             {
-                nlohmann::ordered_json array_json = nlohmann::ordered_json::array();
+                nlohmann::json array_json = nlohmann::json::array();
 
                 // 获取数组大小
                 size_t array_size = member->array_size_;
@@ -166,7 +166,7 @@ inline void serialize_message_fields(
                         const rosidl_typesupport_introspection_cpp::MessageMembers *nested_members =
                             static_cast<const rosidl_typesupport_introspection_cpp::MessageMembers *>(
                                 member->members_->data);
-                        nlohmann::ordered_json nested_json;
+                        nlohmann::json nested_json;
                         serialize_message_fields(nested_json, element_ptr, nested_members);
                         array_json.push_back(nested_json);
                     }
@@ -228,7 +228,7 @@ inline void serialize_message_fields(
                     const rosidl_typesupport_introspection_cpp::MessageMembers *nested_members =
                         static_cast<const rosidl_typesupport_introspection_cpp::MessageMembers *>(
                             member->members_->data);
-                    nlohmann::ordered_json nested_json;
+                    nlohmann::json nested_json;
                     serialize_message_fields(nested_json, field_ptr, nested_members);
                     json_obj[field_name] = nested_json;
                 }
@@ -254,11 +254,11 @@ inline void serialize_message_fields(
 
 // 将任意ROS2消息转换为JSON
 template<typename T>
-inline nlohmann::ordered_json serialize_to_json(const T &msg)
+inline nlohmann::json serialize_to_json(const T &msg)
 {
     std::string type_name = get_formatted_type_name(msg);
 
-    nlohmann::ordered_json json_obj;
+    nlohmann::json json_obj;
 
     auto introspection_library =
         rosbag2_cpp::get_typesupport_library(type_name, "rosidl_typesupport_introspection_cpp");
@@ -291,14 +291,14 @@ inline nlohmann::ordered_json serialize_to_json(const T &msg)
 }
 
 template<typename T>
-inline void deserialize_field(const nlohmann::ordered_json &json_obj, const std::string &field_name, T &field_value)
+inline void deserialize_field(const nlohmann::json &json_obj, const std::string &field_name, T &field_value)
 {
     field_value = json_obj.at(field_name).get<T>();
 }
 
 // 反序列化消息字段的主要函数
 inline void deserialize_message_fields(
-    void *msg, const nlohmann::ordered_json &json_obj, const rosidl_typesupport_introspection_cpp::MessageMembers *members)
+    void *msg, const nlohmann::json &json_obj, const rosidl_typesupport_introspection_cpp::MessageMembers *members)
 {
     if (!members)
     {
@@ -321,7 +321,7 @@ inline void deserialize_message_fields(
         // 根据字段是数组还是单个元素进行反序列化
         if (member->is_array_)
         {
-            nlohmann::ordered_json array_json = json_obj.at(field_name);
+            nlohmann::json array_json = json_obj.at(field_name);
             if (!array_json.is_array())
             {
                 throw std::runtime_error("Expected an array for field: " + field_name);
@@ -465,7 +465,7 @@ inline void deserialize_message_fields(
 
 // 用于从JSON反序列化任何ROS2消息的函数
 template<typename T>
-inline void deserialize_from_json(const nlohmann::ordered_json &json_obj, T &msg)
+inline void deserialize_from_json(const nlohmann::json &json_obj, T &msg)
 {
     std::string type_name = get_formatted_type_name(msg);
 
